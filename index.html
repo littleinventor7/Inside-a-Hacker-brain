@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+<title>3D</title>
+<link href="styles.css" rel="stylesheet" type="text/css" />
+<script src="https://aframe.io/releases/1.6.0/aframe.min.js"></script>
+<script>
+    // Register a custom component for smooth, "swimming" movement
+    AFRAME.registerComponent('space-swim', {
+      schema: {
+        // سرعة الحركة الأفقية والعمودية
+        speedX: { type: 'number', default: 0.05 },
+        speedY: { type: 'number', default: 0.05 },
+        speedZ: { type: 'number', default: 0.05 },
+        // مدى الحركة (أقصى مسافة يتحركها العنصر عن نقطة بدايته)
+        rangeX: { type: 'number', default: 1 },
+        rangeY: { type: 'number', default: 1 },
+        rangeZ: { type: 'number', default: 1 },
+        // سرعة الدوران العشوائي
+        rotationSpeed: { type: 'number', default: 0.5 }
+      },
+
+      init: function () {
+        // بنسجل الموضع الأولي للعنصر علشان نحسب الحركة منه
+        this.initialPosition = this.el.object3D.position.clone();
+        // بنسجل الدوران الأولي للعنصر
+        this.initialRotation = this.el.object3D.rotation.clone();
+
+        // قيم عشوائية لكل عنصر عشان كل واحد يتحرك بشكل مختلف
+        this.randomOffsetX = Math.random() * Math.PI * 2;
+        this.randomOffsetY = Math.random() * Math.PI * 2;
+        this.randomOffsetZ = Math.random() * Math.PI * 2;
+
+        this.randomRotationOffsetX = Math.random() * Math.PI * 2;
+        this.randomRotationOffsetY = Math.random() * Math.PI * 2;
+        this.randomRotationOffsetZ = Math.random() * Math.PI * 2;
+      },
+
+      tick: function (time, deltaTime) {
+        const el = this.el;
+        const data = this.data;
+        // تحويل الـ deltaTime لوحدة مناسبة (بالثواني) عشان الحركة تكون سلسة ومستقلة عن الـ FPS
+        const timeFactor = time * 0.001; // تحويل مللي ثانية لثواني
+
+        // --- حركة الموضع (Position Movement) ---
+        let newX = this.initialPosition.x + Math.sin(timeFactor * data.speedX + this.randomOffsetX) * data.rangeX;
+        let newY = this.initialPosition.y + Math.cos(timeFactor * data.speedY + this.randomOffsetY) * data.rangeY;
+        let newZ = this.initialPosition.z + Math.sin(timeFactor * data.speedZ + this.randomOffsetZ) * data.rangeZ;
+
+        el.object3D.position.set(newX, newY, newZ);
+
+        // --- حركة الدوران (Rotation Movement) ---
+        // هنغير الدوران حوالين المحاور الثلاثة بشكل عشوائي بطيء
+        let newRotX = this.initialRotation.x + Math.sin(timeFactor * data.rotationSpeed * 0.5 + this.randomRotationOffsetX) * (Math.PI / 8); // دوران بسيط
+        let newRotY = this.initialRotation.y + Math.cos(timeFactor * data.rotationSpeed * 0.7 + this.randomRotationOffsetY) * (Math.PI / 8);
+        let newRotZ = this.initialRotation.z + Math.sin(timeFactor * data.rotationSpeed * 0.9 + this.randomRotationOffsetZ) * (Math.PI / 8);
+
+        el.object3D.rotation.set(newRotX, newRotY, newRotZ); // A-Frame بياخد radians للدوران
+
+            
+    }
+      
+    });
+  </script>
+</head>
+<body>
+<a-scene background="gray">
+    <a-assets>
+        <a-asset-item id="cupModel1" src="paper_coffee_cup.glb"></a-asset-item>
+        <a-asset-item id="cupModel2" src="coffee_shop_cup.glb"></a-asset-item>
+        <a-asset-item id="cupModel3" src="coffee_cup..glb"></a-asset-item>
+        <a-asset-item id="cupModel4" src="cute_coffee_cup.glb"></a-asset-item>
+        <a-asset-item id="ladybug1" src="ladybug.glb"></a-asset-item>
+        <a-asset-item id="ladybug2" src="ladybug (1).glb"></a-asset-item>
+        <a-asset-item id="idealamp" src="idea_lamp.glb"></a-asset-item>
+        <a-asset-item id="syntaxerror" src="syntax_error.glb"></a-asset-item>
+        <a-asset-item id="runtimeerror" src="RunTime_Eror.glb"></a-asset-item>
+        <a-asset-item id="error404" src="ERROR_404__BRAIN_NOT_FOUND.glb"></a-asset-item>
+        <a-asset-item id="cout" src="cout___I am out of service_;.glb"></a-asset-item>
+        <a-asset-item id="0101" src="01010101010101.glb"></a-asset-item>
+    </a-assets>
+    <a-sky src="16742-NQUUOV.jpg" scale="10 10 10"></a-sky>
+    <a-entity gltf-model="#0101" position="-10 -15 -35" scale="5 5 5" space-swim="speedX: 0.14; speedY: 0.17; speedZ: 0.15; rangeX: 55; rangeY: 55; rangeZ: 55; rotationSpeed: 0.6" ></a-entity>
+    <a-entity gltf-model="#0101" position="-10 -15 -35" scale="5 5 5" space-swim="speedX: 0.14; speedY: 0.17; speedZ: 0.15; rangeX: 55; rangeY: 55; rangeZ: 55; rotationSpeed: 0.6" ></a-entity>
+    <a-entity gltf-model="#0101" position="-10 -15 -35" scale="5 5 5" space-swim="speedX: 0.14; speedY: 0.17; speedZ: 0.15; rangeX: 55; rangeY: 55; rangeZ: 55; rotationSpeed: 0.6" ></a-entity>
+    <a-entity gltf-model="#0101" position="-10 -15 -35" scale="5 5 5" space-swim="speedX: 0.14; speedY: 0.17; speedZ: 0.15; rangeX: 55; rangeY: 55; rangeZ: 55; rotationSpeed: 0.6" ></a-entity>
+    <a-entity gltf-model="#cout" position="-10 -15 -35" scale="5 5 5" space-swim="speedX: 0.14; speedY: 0.17; speedZ: 0.15; rangeX: 55; rangeY: 55; rangeZ: 55; rotationSpeed: 0.6" ></a-entity>
+    <a-entity gltf-model="#cout" position="-10 -15 -35" scale="5 5 5" space-swim="speedX: 0.14; speedY: 0.17; speedZ: 0.15; rangeX: 55; rangeY: 55; rangeZ: 55; rotationSpeed: 0.6" ></a-entity>
+    <a-entity gltf-model="#cout" position="-10 -15 -35" scale="5 5 5" space-swim="speedX: 0.14; speedY: 0.17; speedZ: 0.15; rangeX: 55; rangeY: 55; rangeZ: 55; rotationSpeed: 0.6" ></a-entity>
+    <a-entity gltf-model="#cout" position="-10 -15 -35" scale="5 5 5" space-swim="speedX: 0.14; speedY: 0.17; speedZ: 0.15; rangeX: 55; rangeY: 55; rangeZ: 55; rotationSpeed: 0.6" ></a-entity>
+    <a-entity gltf-model="#runtimeerror" position="-10 -15 -35" scale="5 5 5" space-swim="speedX: 0.14; speedY: 0.17; speedZ: 0.15; rangeX: 55; rangeY: 55; rangeZ: 55; rotationSpeed: 0.6" ></a-entity>
+    <a-entity gltf-model="#error404" position="-10 -15 -35" scale="5 5 5" space-swim="speedX: 0.14; speedY: 0.17; speedZ: 0.15; rangeX: 55; rangeY: 55; rangeZ: 55; rotationSpeed: 0.6" ></a-entity>
+    <a-entity gltf-model="#syntaxerror" position="-10 -15 -35" scale="5 5 5" space-swim="speedX: 0.14; speedY: 0.17; speedZ: 0.15; rangeX: 55; rangeY: 55; rangeZ: 55; rotationSpeed: 0.6" ></a-entity>
+    <a-entity gltf-model="#runtimeerror" position="-10 -15 -35" scale="5 5 5" space-swim="speedX: 0.14; speedY: 0.17; speedZ: 0.15; rangeX: 55; rangeY: 55; rangeZ: 55; rotationSpeed: 0.6" ></a-entity>
+    <a-entity gltf-model="#error404" position="-10 -15 -35" scale="5 5 5" space-swim="speedX: 0.14; speedY: 0.17; speedZ: 0.15; rangeX: 55; rangeY: 55; rangeZ: 55; rotationSpeed: 0.6" ></a-entity>
+    <a-entity gltf-model="#syntaxerror" position="-10 -15 -35" scale="5 5 5" space-swim="speedX: 0.14; speedY: 0.17; speedZ: 0.15; rangeX: 55; rangeY: 55; rangeZ: 55; rotationSpeed: 0.6" ></a-entity>
+    <a-entity gltf-model="#runtimeerror" position="-10 -15 -35" scale="5 5 5" space-swim="speedX: 0.14; speedY: 0.17; speedZ: 0.15; rangeX: 55; rangeY: 55; rangeZ: 55; rotationSpeed: 0.6" ></a-entity>
+    <a-entity gltf-model="#error404" position="-10 -15 -35" scale="5 5 5" space-swim="speedX: 0.14; speedY: 0.17; speedZ: 0.15; rangeX: 55; rangeY: 55; rangeZ: 55; rotationSpeed: 0.6" ></a-entity>
+    <a-entity gltf-model="#syntaxerror" position="-10 -15 -35" scale="5 5 5" space-swim="speedX: 0.14; speedY: 0.17; speedZ: 0.15; rangeX: 55; rangeY: 55; rangeZ: 55; rotationSpeed: 0.6" ></a-entity>
+    <a-entity gltf-model="#runtimeerror" position="-10 -15 -35" scale="5 5 5" space-swim="speedX: 0.14; speedY: 0.17; speedZ: 0.15; rangeX: 55; rangeY: 55; rangeZ: 55; rotationSpeed: 0.6" ></a-entity>
+    <a-entity gltf-model="#error404" position="-10 -15 -35" scale="5 5 5" space-swim="speedX: 0.14; speedY: 0.17; speedZ: 0.15; rangeX: 55; rangeY: 55; rangeZ: 55; rotationSpeed: 0.6" ></a-entity>
+    <a-entity gltf-model="#syntaxerror" position="-10 -15 -35" scale="5 5 5" space-swim="speedX: 0.14; speedY: 0.17; speedZ: 0.15; rangeX: 55; rangeY: 55; rangeZ: 55; rotationSpeed: 0.6" ></a-entity>
+    <a-entity gltf-model="#cupModel1" position="-10 -15 -35" scale="0.03 0.03 0.03" space-swim="speedX: 0.14; speedY: 0.17; speedZ: 0.15; rangeX: 55; rangeY: 55; rangeZ: 55; rotationSpeed: 0.6" ></a-entity>
+    <a-entity gltf-model="#cupModel2" position="-30 -25 -35" scale="3 3 3" space-swim="speedX: 0.14; speedY: 0.17; speedZ: 0.15; rangeX: 55; rangeY: 55; rangeZ: 55; rotationSpeed: 0.6" ></a-entity>
+    <a-entity gltf-model="#cupModel3" position="30 -25 -35" scale="3 3 3" space-swim="speedX: 0.14; speedY: 0.17; speedZ: 0.15; rangeX: 55; rangeY: 55; rangeZ: 55; rotationSpeed: 0.6" ></a-entity>
+    <a-entity gltf-model="#cupModel4" position="-70 -25 -35" scale="3 3 3" space-swim="speedX: 0.14; speedY: 0.17; speedZ: 0.15; rangeX: 55; rangeY: 55; rangeZ: 55; rotationSpeed: 0.6" ></a-entity>
+    <a-entity gltf-model="#ladybug1" position="-50 -25 -35" scale="0.05 0.05 0.05" space-swim="speedX: 0.14; speedY: 0.17; speedZ: 0.15; rangeX: 55; rangeY: 55; rangeZ: 55; rotationSpeed: 0.6" ></a-entity>
+    <a-entity gltf-model="#ladybug2" position="50 -25 -35" scale="0.05 0.05 0.05" space-swim="speedX: 0.14; speedY: 0.17; speedZ: 0.15; rangeX: 55; rangeY: 55; rangeZ: 55; rotationSpeed: 0.6" ></a-entity>    
+    <a-entity gltf-model="#idealamp" position="40 -25 -35" scale="0.2 0.2 0.2" space-swim="speedX: 0.14; speedY: 0.17; speedZ: 0.15; rangeX: 55; rangeY: 55; rangeZ: 55; rotationSpeed: 0.6" ></a-entity>
+    <a-entity gltf-model="#cupModel1" position="-10 -15 -35" scale="0.03 0.03 0.03" space-swim="speedX: 0.14; speedY: 0.17; speedZ: 0.15; rangeX: 55; rangeY: 55; rangeZ: 55; rotationSpeed: 0.6" ></a-entity>
+    <a-entity gltf-model="#cupModel2" position="-30 -25 -35" scale="3 3 3" space-swim="speedX: 0.14; speedY: 0.17; speedZ: 0.15; rangeX: 55; rangeY: 55; rangeZ: 55; rotationSpeed: 0.6" ></a-entity>
+    <a-entity gltf-model="#cupModel3" position="30 -25 -35" scale="3 3 3" space-swim="speedX: 0.14; speedY: 0.17; speedZ: 0.15; rangeX: 55; rangeY: 55; rangeZ: 55; rotationSpeed: 0.6" ></a-entity>
+    <a-entity gltf-model="#cupModel4" position="-70 -25 -35" scale="3 3 3" space-swim="speedX: 0.14; speedY: 0.17; speedZ: 0.15; rangeX: 55; rangeY: 55; rangeZ: 55; rotationSpeed: 0.6" ></a-entity>
+    <a-entity gltf-model="#ladybug1" position="-50 -25 -35" scale="0.05 0.05 0.05" space-swim="speedX: 0.14; speedY: 0.17; speedZ: 0.15; rangeX: 55; rangeY: 55; rangeZ: 55; rotationSpeed: 0.6" ></a-entity>
+    <a-entity gltf-model="#ladybug2" position="50 -25 -35" scale="0.05 0.05 0.05" space-swim="speedX: 0.14; speedY: 0.17; speedZ: 0.15; rangeX: 55; rangeY: 55; rangeZ: 55; rotationSpeed: 0.6" ></a-entity>    
+    <a-entity gltf-model="#idealamp" position="40 -25 -35" scale="0.2 0.2 0.2" space-swim="speedX: 0.14; speedY: 0.17; speedZ: 0.15; rangeX: 55; rangeY: 55; rangeZ: 55; rotationSpeed: 0.6" ></a-entity>
+    
+    <a-entity gltf-model="#cupModel1" position="-10 -15 -35" scale="0.03 0.03 0.03" space-swim="speedX: 0.14; speedY: 0.17; speedZ: 0.15; rangeX: 55; rangeY: 55; rangeZ: 55; rotationSpeed: 0.6" ></a-entity>
+    <a-entity gltf-model="#cupModel2" position="-30 -25 -35" scale="3 3 3" space-swim="speedX: 0.14; speedY: 0.17; speedZ: 0.15; rangeX: 55; rangeY: 55; rangeZ: 55; rotationSpeed: 0.6" ></a-entity>
+    <a-entity gltf-model="#cupModel3" position="30 -25 -35" scale="3 3 3" space-swim="speedX: 0.14; speedY: 0.17; speedZ: 0.15; rangeX: 55; rangeY: 55; rangeZ: 55; rotationSpeed: 0.6" ></a-entity>
+    <a-entity gltf-model="#cupModel4" position="-70 -25 -35" scale="3 3 3" space-swim="speedX: 0.14; speedY: 0.17; speedZ: 0.15; rangeX: 55; rangeY: 55; rangeZ: 55; rotationSpeed: 0.6" ></a-entity>
+    <a-entity gltf-model="#ladybug1" position="-50 -25 -35" scale="0.05 0.05 0.05" space-swim="speedX: 0.14; speedY: 0.17; speedZ: 0.15; rangeX: 55; rangeY: 55; rangeZ: 55; rotationSpeed: 0.6" ></a-entity>
+    <a-entity gltf-model="#ladybug2" position="50 -25 -35" scale="0.05 0.05 0.05" space-swim="speedX: 0.14; speedY: 0.17; speedZ: 0.15; rangeX: 55; rangeY: 55; rangeZ: 55; rotationSpeed: 0.6" ></a-entity>    
+    <a-entity gltf-model="#idealamp" position="40 -25 -35" scale="0.2 0.2 0.2" space-swim="speedX: 0.14; speedY: 0.17; speedZ: 0.15; rangeX: 55; rangeY: 55; rangeZ: 55; rotationSpeed: 0.6" ></a-entity>
+
+    <a-entity gltf-model="#cupModel1" position="-10 -15 -35" scale="0.03 0.03 0.03" space-swim="speedX: 0.14; speedY: 0.17; speedZ: 0.15; rangeX: 55; rangeY: 55; rangeZ: 55; rotationSpeed: 0.6" ></a-entity>
+    <a-entity gltf-model="#cupModel2" position="-30 -25 -35" scale="3 3 3" space-swim="speedX: 0.14; speedY: 0.17; speedZ: 0.15; rangeX: 55; rangeY: 55; rangeZ: 55; rotationSpeed: 0.6" ></a-entity>
+    <a-entity gltf-model="#cupModel3" position="30 -25 -35" scale="3 3 3" space-swim="speedX: 0.14; speedY: 0.17; speedZ: 0.15; rangeX: 55; rangeY: 55; rangeZ: 55; rotationSpeed: 0.6" ></a-entity>
+    <a-entity gltf-model="#cupModel4" position="-70 -25 -35" scale="3 3 3" space-swim="speedX: 0.14; speedY: 0.17; speedZ: 0.15; rangeX: 55; rangeY: 55; rangeZ: 55; rotationSpeed: 0.6" ></a-entity>
+    <a-entity gltf-model="#ladybug1" position="-50 -25 -35" scale="0.05 0.05 0.05" space-swim="speedX: 0.14; speedY: 0.17; speedZ: 0.15; rangeX: 55; rangeY: 55; rangeZ: 55; rotationSpeed: 0.6" ></a-entity>
+    <a-entity gltf-model="#ladybug2" position="50 -25 -35" scale="0.05 0.05 0.05" space-swim="speedX: 0.14; speedY: 0.17; speedZ: 0.15; rangeX: 55; rangeY: 55; rangeZ: 55; rotationSpeed: 0.6" ></a-entity>    
+    <a-entity gltf-model="#idealamp" position="40 -25 -35" scale="0.2 0.2 0.2" space-swim="speedX: 0.14; speedY: 0.17; speedZ: 0.15; rangeX: 55; rangeY: 55; rangeZ: 55; rotationSpeed: 0.6" ></a-entity>
+    
+    
+    
+    
+    
+    
+    
+    
+    <a-plane color="transpart" width="0" height="0" position="0 2 -3">
+        <a-text value="ERROR 404: BRAIN NOT FOUND"  position="0 0 0.01" color="green" scale="1 1 1" space-swim="speedX: 0.14; speedY: 0.17; speedZ: 0.15; rangeX: 55; rangeY: 55; rangeZ: 55; rotationSpeed: 0.6" ></a-text>
+      </a-plane>
+      
+</a-scene>
+
+<script src="script.js"></script>
+</body>
+</html>
