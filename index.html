@@ -7,62 +7,41 @@
 <link href="styles.css" rel="stylesheet" type="text/css" />
 <script src="https://aframe.io/releases/1.6.0/aframe.min.js"></script>
 <script>
-    // Register a custom component for smooth, "swimming" movement
-    AFRAME.registerComponent('space-swim', {
-      schema: {
-        // سرعة الحركة الأفقية والعمودية
-        speedX: { type: 'number', default: 0.05 },
-        speedY: { type: 'number', default: 0.05 },
-        speedZ: { type: 'number', default: 0.05 },
-        // مدى الحركة (أقصى مسافة يتحركها العنصر عن نقطة بدايته)
-        rangeX: { type: 'number', default: 1 },
-        rangeY: { type: 'number', default: 1 },
-        rangeZ: { type: 'number', default: 1 },
-        // سرعة الدوران العشوائي
-        rotationSpeed: { type: 'number', default: 0.5 }
-      },
+  AFRAME.registerComponent('space-swim', {
+    schema:{
+      speedX: {type:'number', default: 0.05},
+      speedY: {type:'number', default: 0.05},
+      speedZ: {type:'number', default: 0.05},
+      rangeX: {type:'number', default: 1},
+      rangeY: {type:'number', default: 1},
+      rangeZ: {type:'number', default: 1},
+      rotationSpeed: {type:'number', default: 0.5},
+    },
+    init: function () {
+      this.initialPosition = this.el.object3D.position.clone();
+      this.initialRotation = this.el.object3D.rotation.clone();
+      this.randomOffsetX = Math.random() * Math.PI * 2;   
+      this.randomOffsetY = Math.random() * Math.PI * 2;  
+      this.randomOffsetZ = Math.random() * Math.PI * 2;  
+      this.randomRotationOffsetX = Math.random() * Math.PI * 2;
+      this.randomRotationOffsetY = Math.random() * Math.PI * 2;
+      this.randomRotationOffsetZ = Math.random() * Math.PI * 2;  
+    },
+    tick : function(time, deltaTime) {
+      const el=this.el;
+      const data = this.data;
+      const timeFactor = time * 0.001;
+      let newX = this.initialPosition.x + Math.sin(timeFactor*data.speedX + this.randomOffsetX)* data.rangeX;
+      let newY = this.initialPosition.y + Math.cos(timeFactor*data.speedY + this.randomOffsetY)* data.rangeY;
+      let newZ = this.initialPosition.z + Math.sin(timeFactor*data.speedZ + this.randomOffsetZ)* data.rangeZ;
+      el.object3D.position.set(newX,newY,newZ);
+      let newRotX = this.initialRotation.x + Math.sin(timeFactor*data.rotationSpeed* 0.5 + this.randomRotationOffsetX)* (Math.PI/8);
+      let newRotY = this.initialRotation.y + Math.cos(timeFactor*data.rotationSpeed* 0.7 + this.randomRotationOffsetY)* (Math.PI/8);
+      let newRotZ = this.initialRotation.z + Math.sin(timeFactor*data.rotationSpeed *0.9 + this.randomRotationOffsetZ)* (Math.PI/8);
+      el.object3D.rotation.set(newRotX,newRotY,newRotZ);
+    } 
 
-      init: function () {
-        // بنسجل الموضع الأولي للعنصر علشان نحسب الحركة منه
-        this.initialPosition = this.el.object3D.position.clone();
-        // بنسجل الدوران الأولي للعنصر
-        this.initialRotation = this.el.object3D.rotation.clone();
-
-        // قيم عشوائية لكل عنصر عشان كل واحد يتحرك بشكل مختلف
-        this.randomOffsetX = Math.random() * Math.PI * 2;
-        this.randomOffsetY = Math.random() * Math.PI * 2;
-        this.randomOffsetZ = Math.random() * Math.PI * 2;
-
-        this.randomRotationOffsetX = Math.random() * Math.PI * 2;
-        this.randomRotationOffsetY = Math.random() * Math.PI * 2;
-        this.randomRotationOffsetZ = Math.random() * Math.PI * 2;
-      },
-
-      tick: function (time, deltaTime) {
-        const el = this.el;
-        const data = this.data;
-        // تحويل الـ deltaTime لوحدة مناسبة (بالثواني) عشان الحركة تكون سلسة ومستقلة عن الـ FPS
-        const timeFactor = time * 0.001; // تحويل مللي ثانية لثواني
-
-        // --- حركة الموضع (Position Movement) ---
-        let newX = this.initialPosition.x + Math.sin(timeFactor * data.speedX + this.randomOffsetX) * data.rangeX;
-        let newY = this.initialPosition.y + Math.cos(timeFactor * data.speedY + this.randomOffsetY) * data.rangeY;
-        let newZ = this.initialPosition.z + Math.sin(timeFactor * data.speedZ + this.randomOffsetZ) * data.rangeZ;
-
-        el.object3D.position.set(newX, newY, newZ);
-
-        // --- حركة الدوران (Rotation Movement) ---
-        // هنغير الدوران حوالين المحاور الثلاثة بشكل عشوائي بطيء
-        let newRotX = this.initialRotation.x + Math.sin(timeFactor * data.rotationSpeed * 0.5 + this.randomRotationOffsetX) * (Math.PI / 8); // دوران بسيط
-        let newRotY = this.initialRotation.y + Math.cos(timeFactor * data.rotationSpeed * 0.7 + this.randomRotationOffsetY) * (Math.PI / 8);
-        let newRotZ = this.initialRotation.z + Math.sin(timeFactor * data.rotationSpeed * 0.9 + this.randomRotationOffsetZ) * (Math.PI / 8);
-
-        el.object3D.rotation.set(newRotX, newRotY, newRotZ); // A-Frame بياخد radians للدوران
-
-            
-    }
-      
-    });
+  });
   </script>
 </head>
 <body>
